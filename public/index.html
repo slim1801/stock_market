@@ -1,0 +1,146 @@
+<html>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<head>
+    <title>Mock Trading Environment</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- Add JQuery + BootStrap + Knockout + Socket.io-->
+    <link rel="stylesheet" type="text/css" href="./lib/css/bootstrap.min.css">
+    <script type="text/javascript" src="./lib/js/jquery.min.js"></script>
+    <script type="text/javascript" src="./lib/js/knockout.min.js"></script>
+    <script type="text/javascript" src="./lib/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./lib/js/socket.io.js"></script>
+    <script type="text/javascript" src="./lib/js/less.min.js"></script>
+
+    <!-- Add JQuery UI-->
+    <link rel="stylesheet" type="text/css" href="./lib/css/jquery-ui.structure.min.css">
+    <link rel="stylesheet" type="text/css" href="./lib/css/jquery-ui.theme.min.css">
+    <script type="text/javascript" src="./lib/js/jquery-ui.min.js"></script>
+</head>
+<body class="light-navy-background">
+	<div class="container col-sm-6" style="margin-top:20px">
+		<div>
+			<div class="dark-navy-background medium_padding white-text" style="border: solid 3px white"><p style="font-size:30px">Stocks</p></div>
+			<div class="table-responsive dark-white-background" style="margin-top:20px;">
+				<table class="table table-striped">
+					<thead>
+						<tr data-bind="foreach: column_titles">
+							<th data-bind="text: title" style="text-align:center"></th>
+						</tr>
+					</thead>
+					<tbody data-bind="foreach: companies">
+						<tr style="text-align:center">
+							<td data-bind="text: code"></td>
+							<td  data-bind="style: {color: bid_movement_color()}">
+                                <span data-bind="text: bid_price_formatted"></span>
+                                <span data-bind="visible: bid_movement() == 'up'" class="glyphicon glyphicon-arrow-up"></span>
+                                <span data-bind="visible: bid_movement() == 'level'" class="glyphicon glyphicon-minus"></span>
+                                <span data-bind="visible: bid_movement() == 'down'" class="glyphicon glyphicon-arrow-down"></span>
+                            </td>
+							<td data-bind="style: {color: ask_movement_color()}">
+                                <span data-bind="text: ask_price_formatted"></span>
+                                <span data-bind="visible: ask_movement() == 'up'" class="glyphicon glyphicon-arrow-up"></span>
+                                <span data-bind="visible: ask_movement() == 'level'" class="glyphicon glyphicon-minus"></span>
+                                <span data-bind="visible: ask_movement() == 'down'" class="glyphicon glyphicon-arrow-down"></span>
+                            </td>
+							<td>
+								<button type="button" class="btn btn-danger" data-bind="click: $root.buy" data-toggle="modal" data-target="#stockModal">BUY</button>
+								<button type="button" class="btn btn-success" data-bind="click: $root.sell" data-toggle="modal" data-target="#stockModal">SELL</button>
+								<button type="button" class="btn btn-primary" data-bind="click: $root.pop">POP</button>
+								<span style="position:relative">
+									<span class="glyphicon glyphicon-eye-open" data-bind="visible: popped" style="color:green;margin-left:20px;position:absolute"></span>
+								</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="container col-sm-6">
+		<div class="dark-navy-background medium_padding white-text" style="border:solid 3px white;margin-top: 20px;"><p style="font-size:30px">Watch List</p></div>
+		<div id="watch_container" data-bind="foreach: { data: pop_windows, afterRender: re_position }">
+			<div class="draggable resizable ui-widget-content v_window" data-bind="virtual_window_drag: {window: $data, containment: '#watch_container', windows: $root.pop_windows},
+                                                                          click: bring_to_front($data, $root.pop_windows),
+                                                                          style: { zIndex: z_index(), top: top(), left: left() }">
+				<div class="window-header row extra_padding" style="text-align:right">
+					<div class="col-sm-8">
+				    	<div class="text-center" data-bind="text: security.code()" style="font-size:18px"></div>
+					</div>
+					<div  class="col-sm-4">
+			        	<button type="button" class="btn-xs btn-default" data-bind="click: $root.close_window" style="height:25px;color:red"><span class="glyphicon glyphicon-remove" style="top:-1px"></span></button>
+			        </div>
+			    </div>
+			    <div class="window-body" data-bind="with: security">
+			    	<div class="extra_padding">
+				    	<div class="col-sm-6 vcenter">Quantity: </div>
+				    	<div class="col-sm-6 vcenter"><input class="form-control input-group-sm" type="number" data-bind="textInput: quantity" min="0" /></div>
+				    </div>
+			    	<div class="extra_padding">
+				    	<table class="table" style="width:100%">
+							<thead>
+								<tr>
+									<th class="extra_padding" style="text-align:center">
+										<button type="button" class="btn btn-danger" data-bind="click: $root.buy" data-toggle="modal" data-target="#stockModal">BUY</button>
+									</th>
+									<th class="extra_padding" style="text-align:center">
+										<button type="button" class="btn btn-success" data-bind="click: $root.sell" data-toggle="modal" data-target="#stockModal">SELL</button>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr style="text-align:center">
+									<td class="extra_padding" data-bind="text: bid_price_formatted"></td>
+									<td class="extra_padding" data-bind="text: ask_price_formatted"></td>
+								</tr>
+							</tbody>
+						</table>
+				    </div>
+			    </div>
+			</div>
+		</div>
+	</div>
+	<div id="stockModal" class="modal" role="dialog">
+	    <div class="vertical-alignment-helper">
+	        <div class="modal-dialog modal-sm vertical-align-center">
+	   			<!-- Modal content-->
+			    <div class="modal-content" data-bind="with: modal()">
+				    <div class="modal-header white-text" data-bind="style: {backgroundColor: operation() == 'Sell' ? '#87D37C' : '#F47983'}">
+				     	<div class="col-sm-6"><h2 class="modal-title" data-bind="text: operation"></h2></div>
+				     	<div class="col-sm-6"><h4 class="modal-title" data-bind="text: security.code" style="text-align:right"></h4></div>
+				    </div>
+				    <div class="modal-body">
+				    	<div class="row extra_padding">
+					    	<div class="col-sm-8 vcenter"><b>Stock Quantity:</b></div>
+					    	<div class="col-sm-4 vcenter"><input class="form-control" type="number" data-bind="textInput: security.quantity" min="0" /></div>
+					    </div>
+				    	<div class="row extra_padding">
+					    	<div class="col-sm-8"><div><b>Current Stock Price:</b></div></div>
+					    	<div class="col-sm-4">
+					    		<div class="text-center" data-bind="visible: operation() == 'Sell'">
+					    			<div data-bind="text: security.ask_price_formatted"></div>
+					    		</div>
+					    		<div class="text-center" data-bind="visible: operation() == 'Buy'">
+					    			<div data-bind="text: security.bid_price_formatted"></div>
+					    		</div>
+					    	</div>
+				    	</div>
+				    	<div class="row extra_padding">
+					    	<div class="col-sm-8"><div><b>Total Pricing:</b></div></div>
+					    	<div class="col-sm-4"><div class="text-center" data-bind="text: total_price"></div></div>
+				    	</div>
+				    </div>
+				    <div class="modal-footer">
+				        <button type="button" class="btn btn-default" data-bind="click: $root.buy_stock_modal">OK</button>
+				        <button type="button" class="btn btn-default" data-dismiss="modal" data-id="Close">Close</button>
+				    </div>
+			    </div>
+		  	</div>
+		</div>
+	</div>
+	<!-- Client Side Javascript and CSS-->
+	<script type="text/javascript" src="./js/client.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    </script>
+</body>
+</html>

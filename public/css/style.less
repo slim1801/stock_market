@@ -1,0 +1,84 @@
+@light-colors: red #e74c3c, orange #e67e22, yellow #f1c40f, green #2ecc71, swamp #1abc9c, blue #3498db, purple #9b59b6, navy #34495e, white #f6f8f9, grey #96a6a7;
+@dark-colors: red #c0392b, orange #d35400, yellow #f39c12, green #27ae60, swamp #27ae60, blue #2980b9, purple #8e44ad, navy #2e4154, white #bdc3c7, grey #7f8c8d;
+
+@range: 5 5px, 10 10px, 15 15px, 20 20px, 25 25px, 30 30px;
+
+.make-classes(light, @light-colors, background, background-color);
+.make-classes(dark, @dark-colors, background, background-color);
+
+.make-classes(@prefix, @list, @postfix, @attr) {
+    .iter(length(@list));
+    .iter(@i) when (@i > 0) {
+        .iter(@i - 1);
+        @pair:  extract(@list, @i); 
+        @key:   extract(@pair, 1);
+        @value: extract(@pair, 2); 
+        .@{prefix}-@{key}-@{postfix} {
+            @{attr}: @value;
+        }
+    }
+}
+
+.vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 100%;
+}
+.vertical-align-center {
+    /* To center vertically */
+    display: table-cell;
+    vertical-align: middle;
+}
+.modal-content {
+    /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+    width:inherit;
+    height:inherit;
+    /* To center horizontally */
+    margin: 0 auto;
+    overflow: hidden;
+}
+.vertical-align-container {
+    position: relative;
+}
+.vertical-align {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.extra_padding {
+    padding: 5px;
+}
+.medium_padding {
+    padding: 10px;
+}
+.large_padding {
+    padding: 20px;
+}
+.draggable {
+    width: 250px;
+    height: 200px;
+    padding: 0.5em;
+    margin: 15px;
+    position: absolute;
+}
+.vcenter {
+    display: table-cell;
+    vertical-align: middle;
+    float: none;
+}
+.white-text {
+    color: white;
+}
+#watch_container {
+    height:100%;
+    position: relative;
+}
+.v_window {
+    border: 5px solid white;
+}

@@ -1,0 +1,123 @@
+.light-red-background {
+  background-color: #e74c3c;
+}
+.light-orange-background {
+  background-color: #e67e22;
+}
+.light-yellow-background {
+  background-color: #f1c40f;
+}
+.light-green-background {
+  background-color: #2ecc71;
+}
+.light-swamp-background {
+  background-color: #1abc9c;
+}
+.light-blue-background {
+  background-color: #3498db;
+}
+.light-purple-background {
+  background-color: #9b59b6;
+}
+.light-navy-background {
+  background-color: #34495e;
+}
+.light-white-background {
+  background-color: #f6f8f9;
+}
+.light-grey-background {
+  background-color: #96a6a7;
+}
+.dark-red-background {
+  background-color: #c0392b;
+}
+.dark-orange-background {
+  background-color: #d35400;
+}
+.dark-yellow-background {
+  background-color: #f39c12;
+}
+.dark-green-background {
+  background-color: #27ae60;
+}
+.dark-swamp-background {
+  background-color: #27ae60;
+}
+.dark-blue-background {
+  background-color: #2980b9;
+}
+.dark-purple-background {
+  background-color: #8e44ad;
+}
+.dark-navy-background {
+  background-color: #2e4154;
+}
+.dark-white-background {
+  background-color: #bdc3c7;
+}
+.dark-grey-background {
+  background-color: #7f8c8d;
+}
+.vertical-alignment-helper {
+  display: table;
+  height: 100%;
+  width: 100%;
+}
+.vertical-align-center {
+  /* To center vertically */
+  display: table-cell;
+  vertical-align: middle;
+}
+.modal-content {
+  /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+  width: inherit;
+  height: inherit;
+  /* To center horizontally */
+  margin: 0 auto;
+  overflow: hidden;
+}
+.vertical-align-container {
+  position: relative;
+}
+.vertical-align {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.extra_padding {
+  padding: 5px;
+}
+.medium_padding {
+  padding: 10px;
+}
+.large_padding {
+  padding: 20px;
+}
+.draggable {
+  width: 250px;
+  height: 200px;
+  padding: 0.5em;
+  margin: 15px;
+  position: absolute;
+}
+.vcenter {
+  display: table-cell;
+  vertical-align: middle;
+  float: none;
+}
+.white-text {
+  color: white;
+}
+#watch_container {
+  height: 100%;
+  position: relative;
+}
+.v_window {
+  border: 5px solid white;
+}
